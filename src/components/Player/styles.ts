@@ -29,9 +29,16 @@ export const Content = styled.div`
   }
 
   footer {
+    align-items: stretch;
+
     width: 100%;
   }
 `;
+
+export const Slider = styled.div`
+  flex: 1;
+`;
+
 
 export const EmptyPlayer = styled.div`
   width: 100%;

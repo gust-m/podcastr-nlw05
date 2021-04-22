@@ -2,7 +2,7 @@ import Header from '../components/Header';
 import Player from '../components/Player';
 
 import GlobalStyle from '../styles/global';
-import { Container } from '../styles/styles';
+import { Container } from '../styles/appStyles';
 
 const MyApp = ({ Component, pageProps }) => {
   return (

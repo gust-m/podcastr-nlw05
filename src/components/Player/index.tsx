@@ -3,6 +3,7 @@ import {
   Content,
   EmptyPlayer,
   Progress,
+  Slider,
   EmptySlider,
   Buttons,
 } from './styles';
@@ -23,7 +24,9 @@ const Player: React.FC = () => {
         <footer>
           <Progress>
             <span>00:00</span>
-            <EmptySlider />
+            <Slider>
+              <EmptySlider />
+            </Slider>
             <span>00:00</span>
           </Progress>
 
