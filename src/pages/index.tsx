@@ -8,6 +8,8 @@ import api from '../services/api';
 import { convertDurationToTimeString } from '../utils/convertDurationToTimeString';
 
 import { HomePage, LatestEpisodes, AllEpisodes } from '../styles/indexStyles';
+import { useContext } from 'react';
+import { PlayerContext } from '../contexts/PlayerContext';
 
 interface Episode {
   id: string,
@@ -18,11 +20,8 @@ interface Episode {
   description:string,
   publishedAt: string;
   durationAsString: string,
-  file: {
-    url: string,
-    type: string,
-    duration: number,
-  }
+  duration: number,
+  url: string,
 }
 
 interface HomeProps {
@@ -31,6 +30,8 @@ interface HomeProps {
 }
 
 const Home = ({ latestEpisodes, allEpisodes }: HomeProps) => {
+  const { play } = useContext(PlayerContext);
+
   return (
     <HomePage>
       <LatestEpisodes>
@@ -107,7 +108,7 @@ const Home = ({ latestEpisodes, allEpisodes }: HomeProps) => {
                   <td>{episode.durationAsString}</td>
 
                   <td>
-                    <button type="button">
+                    <button type="button" onClick={() => play(episode)}>
                       <img src="/play-green.svg" alt="Tocar episódio" />
                     </button>
                   </td>
@@ -141,6 +142,7 @@ export const getStaticProps: GetStaticProps = async () => {
       }),
       duration: Number(episode.file.duration),
       durationAsString: convertDurationToTimeString(Number(episode.file.duration)),
+      url: episode.file.url,
     };
   });
 
