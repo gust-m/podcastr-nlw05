@@ -23,6 +23,7 @@ export const Container = styled.div`
         padding-left: 1rem;
         position: relative;
 
+
         &::before {
           content: '';
           position: absolute;

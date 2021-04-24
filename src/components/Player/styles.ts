@@ -1,14 +1,19 @@
 import styled, { css } from 'styled-components';
 
-interface ContentFooterProps {
+interface ContentProgressProps {
   empty: boolean;
+}
+
+interface ButtonProps {
+  isActiveLooping: boolean;
+  isActiveShuffling: boolean;
 }
 
 export const Container = styled.div`
   height: 100vh;
 `;
 
-export const Content = styled.div<ContentFooterProps>`
+export const Content = styled.div`
   padding: 3rem 4rem;
   width: 26.5rem;
   height: 100vh;
@@ -34,16 +39,6 @@ export const Content = styled.div<ContentFooterProps>`
 
   footer {
     align-items: stretch;
-
-    ${props =>
-      props.empty ? css`
-        opacity: 0.5;
-      `
-      :
-      css`
-        opacity: 1;
-      `
-    };
 
     width: 100%;
   }
@@ -96,7 +91,7 @@ export const EmptyPlayer = styled.div`
   justify-content: center;
 `;
 
-export const Progress = styled.div`
+export const Progress = styled.div<ContentProgressProps>`
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -107,6 +102,16 @@ export const Progress = styled.div`
     width: 4rem;
     text-align: center;
   }
+
+  ${props =>
+      props.empty ? css`
+        opacity: 0.5;
+      `
+      :
+      css`
+        opacity: 1;
+      `
+    };
 `;
 
 export const EmptySlider = styled.div`
@@ -116,7 +121,7 @@ export const EmptySlider = styled.div`
   border-radius: 2px;
 `;
 
-export const Buttons = styled.div`
+export const Buttons = styled.div<ButtonProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -131,6 +136,7 @@ export const Buttons = styled.div`
 
     &:disabled {
       cursor: default;
+      opacity: 0.5;
     }
 
     &:hover:not(:disabled) {
@@ -148,4 +154,28 @@ export const Buttons = styled.div`
       }
     }
   }
+
+  ${props =>
+    props.isActiveLooping && css`
+      button:last-child {
+        filter: invert(0.35) sepia(1) saturate(3) hue-rotate(100deg);
+
+        &:hover {
+          filter: brightness(0.6) invert(0.35) sepia(1) saturate(3) hue-rotate(100deg);
+        }
+      }
+    `
+    }
+
+  ${props =>
+    props.isActiveShuffling && css`
+      button:first-child {
+        filter: invert(0.35) sepia(1) saturate(3) hue-rotate(100deg);
+
+        &:hover {
+          filter: brightness(0.6) invert(0.35) sepia(1) saturate(3) hue-rotate(100deg);
+        }
+      }
+    `
+    }
 `;

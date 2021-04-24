@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import Head from 'next/head';
 
 import { format, parseISO } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
@@ -30,15 +31,20 @@ interface HomeProps {
 }
 
 const Home = ({ latestEpisodes, allEpisodes }: HomeProps) => {
-  const { play } = useContext(PlayerContext);
+  const { playList, playNext, playPrevious } = useContext(PlayerContext);
+
+  const episodeList = [...latestEpisodes, ...allEpisodes];
 
   return (
     <HomePage>
+      <Head>
+        <title>Home | Podcastr</title>
+      </Head>
       <LatestEpisodes>
         <h2>Últimos Lançamentos</h2>
 
         <ul>
-          {latestEpisodes.map(episode => {
+          {latestEpisodes.map((episode, index) => {
             return (
               <li key={episode.id}>
                 <Image
@@ -58,7 +64,7 @@ const Home = ({ latestEpisodes, allEpisodes }: HomeProps) => {
                   <span>{episode.durationAsString}</span>
                 </div>
 
-                <button type="button">
+                <button type="button" onClick={() => playList(episodeList, index)}>
                   <img src="/play-green.svg" alt="Tocar episódio"/>
                 </button>
               </li>
@@ -84,7 +90,7 @@ const Home = ({ latestEpisodes, allEpisodes }: HomeProps) => {
           </thead>
 
           <tbody>
-            {allEpisodes.map(episode => {
+            {allEpisodes.map((episode, index) => {
               return (
                 <tr key={episode.id}>
                   <td style={{ width: 72 }}>
@@ -108,12 +114,11 @@ const Home = ({ latestEpisodes, allEpisodes }: HomeProps) => {
                   <td>{episode.durationAsString}</td>
 
                   <td>
-                    <button type="button" onClick={() => play(episode)}>
+                    <button type="button" onClick={() => playList(episodeList, index + latestEpisodes.length)}>
                       <img src="/play-green.svg" alt="Tocar episódio" />
                     </button>
                   </td>
                 </tr>
-
               )
             })}
           </tbody>

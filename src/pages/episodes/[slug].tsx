@@ -1,5 +1,6 @@
 import { format, parseISO } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
+import Head from 'next/head';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -8,6 +9,8 @@ import api from '../../services/api';
 import { convertDurationToTimeString } from '../../utils/convertDurationToTimeString';
 
 import { Container, ThumbnailContainer } from './styles';
+import { useContext } from 'react';
+import { PlayerContext } from '../../contexts/PlayerContext';
 
 interface Episode {
   id: string,
@@ -18,11 +21,8 @@ interface Episode {
   description:string,
   publishedAt: string;
   durationAsString: string,
-  file: {
-    url: string,
-    type: string,
-    duration: number,
-  }
+  duration: number,
+  url: string,
 }
 
 interface EpisodeProps {
@@ -31,8 +31,12 @@ interface EpisodeProps {
 
 
 const Episode = ({ episode }: EpisodeProps)  => {
+  const { play } = useContext(PlayerContext);
   return (
     <Container>
+      <Head>
+        <title>{episode.title} | Podcastr</title>
+      </Head>
       <ThumbnailContainer>
         <Link href="/">
           <button type="button">
@@ -46,7 +50,7 @@ const Episode = ({ episode }: EpisodeProps)  => {
           objectFit="cover"
         />
 
-        <button type="button">
+        <button type="button" onClick={() => play(episode)}>
           <img src="/play.svg" alt="Tocar episódio"/>
         </button>
       </ThumbnailContainer>
@@ -99,8 +103,9 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
       publishedAt: format(parseISO(data.published_at), 'd MMM yy', {
         locale: ptBR,
       }),
-      duration: Number(data.file.duration),
       durationAsString: convertDurationToTimeString(Number(data.file.duration)),
+      duration: Number(data.file.duration),
+      url: data.file.url,
   }
 
   return {
